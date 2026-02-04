@@ -27,11 +27,12 @@ function Dashboard() {
     }
   }, [user, authLoading, navigate]);
 
-  useEffect(() => {
-    if (user) {
-      fetchData();
-    }
-  }, [filters, user]);
+ useEffect(() => {
+  if (user) {
+    fetchData();
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [filters, user]);
 
   const fetchData = async () => {
     setLoading(true);

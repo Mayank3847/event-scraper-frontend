@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import EventCard from './EventCard';
 import { getEvents } from '../services/api';
 
@@ -12,21 +12,25 @@ function EventList() {
     fetchEvents();
   }, [search, category]);
 
-  const fetchEvents = async () => {
-    setLoading(true);
-    try {
-      const params = {};
-      if (search) params.search = search;
-      if (category) params.category = category;
-      
-      const response = await getEvents(params);
-      setEvents(response.data.events);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchEvents = useCallback(async () => {
+  setLoading(true);
+  try {
+    const params = {};
+    if (search) params.search = search;
+    if (category) params.category = category;
+    
+    const response = await getEvents(params);
+    setEvents(response.data.events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  } finally {
+    setLoading(false);
+  }
+}, [search, category]);
+
+useEffect(() => {
+  fetchEvents();
+}, [fetchEvents]);
 
   const categories = ['Music', 'Arts', 'Food', 'Sports', 'Entertainment', 'Business'];
 

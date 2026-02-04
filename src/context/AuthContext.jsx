@@ -16,9 +16,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+ useEffect(() => {
+  checkAuth();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   const checkAuth = async () => {
     const token = localStorage.getItem('token');
