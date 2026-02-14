@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,31 +10,29 @@ const api = axios.create({
 });
 
 // Add token to requests
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-// Events
+// Public endpoints
 export const getEvents = (params) => api.get('/api/events', { params });
 export const getEvent = (id) => api.get(`/api/events/${id}`);
 export const captureEmail = (data) => api.post('/api/events/capture-email', data);
-export const importEvent = (id, notes) => api.post(`/api/events/${id}/import`, { notes });
-export const updateEventStatus = (id, status) => api.patch(`/api/events/${id}/status`, { status });
-export const getDashboardStats = () => api.get('/api/events/admin/stats');
-// Verify OTP
-export const verifyOTP = (data) => api.post('/events/verify-otp', data);
 
-// Resend OTP
-export const resendOTP = (data) => api.post('/events/resend-otp', data);
-// Auth
+// OTP endpoints - ADD THESE!
+export const verifyOTP = (data) => api.post('/api/events/verify-otp', data);
+export const resendOTP = (data) => api.post('/api/events/resend-otp', data);
+
+// Auth endpoints
 export const getCurrentUser = () => api.get('/api/auth/me');
-export const logout = () => api.post('/api/auth/logout');
+
+// Admin endpoints
+export const importEvent = (id, data) => api.post(`/api/events/${id}/import`, data);
+export const updateEventStatus = (id, data) => api.patch(`/api/events/${id}/status`, data);
+export const getDashboardStats = () => api.get('/api/events/admin/stats');
 
 export default api;
