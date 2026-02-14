@@ -29,7 +29,11 @@ export const captureEmail = (data) => api.post('/api/events/capture-email', data
 export const importEvent = (id, notes) => api.post(`/api/events/${id}/import`, { notes });
 export const updateEventStatus = (id, status) => api.patch(`/api/events/${id}/status`, { status });
 export const getDashboardStats = () => api.get('/api/events/admin/stats');
+// Verify OTP
+export const verifyOTP = (data) => api.post('/events/verify-otp', data);
 
+// Resend OTP
+export const resendOTP = (data) => api.post('/events/resend-otp', data);
 // Auth
 export const getCurrentUser = () => api.get('/api/auth/me');
 export const logout = () => api.post('/api/auth/logout');
